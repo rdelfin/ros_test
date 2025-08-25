@@ -1,0 +1,3 @@
+# The name of the dazel image to build or pull.
+DAZEL_IMAGE_NAME="bazel-builder:commit-32e5440bfdfa795c7fdef8885374e5cbbb9976b5"
+DAZEL_REPOSITORY="mvukov"
