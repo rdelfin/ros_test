@@ -1,0 +1,66 @@
+workspace(name = "ros_test")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "com_github_mvukov_rules_ros2",
+    # Here you can use e.g. sha256sum cli utility to compute the sha sum.
+    # sha256 = "<sha sum of the .tar.gz archive below>",
+    strip_prefix = "rules_ros2-3ff2dd67b8c74a2027b357ce4f0f1afb4971d43e",
+    url = "https://github.com/mvukov/rules_ros2/archive/3ff2dd67b8c74a2027b357ce4f0f1afb4971d43e.tar.gz",
+)
+
+load("@com_github_mvukov_rules_ros2//repositories:repositories.bzl", "ros2_repositories", "ros2_workspace_repositories")
+
+ros2_workspace_repositories()
+
+ros2_repositories()
+
+load("@com_github_mvukov_rules_ros2//repositories:deps.bzl", "ros2_deps")
+
+ros2_deps()
+
+load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
+
+py_repositories()
+
+python_register_toolchains(
+    name = "rules_ros2_python",
+    # You must pin the Python version to the one used for rules_ros2_pip_deps_numpy_headers and current_py_cc_headers in rules_ros2.
+    # Otherwise you will get errors at runtime (not build time!) like:
+    #     ModuleNotFoundError: No module named 'numpy.core._multiarray_umath'
+    #     Importing the numpy C-extensions failed.
+    python_version = "3.10",
+)
+
+load("@rules_python//python:pip.bzl", "pip_parse")
+
+pip_parse(
+    name = "rules_ros2_pip_deps",
+    python_interpreter_target = "@rules_ros2_python_host//:python",
+    requirements_lock = "@com_github_mvukov_rules_ros2//:requirements_lock.txt",
+)
+
+load(
+    "@rules_ros2_pip_deps//:requirements.bzl",
+    install_rules_ros2_pip_deps = "install_deps",
+)
+
+install_rules_ros2_pip_deps()
+
+# Below is an optional setup for Rust support for ROS 2.
+
+load("@com_github_mvukov_rules_ros2//repositories:rust_setup_stage_1.bzl", "rust_setup_stage_1")
+
+rust_setup_stage_1()
+
+load("@com_github_mvukov_rules_ros2//repositories:rust_setup_stage_2.bzl", "rust_setup_stage_2")
+
+rust_setup_stage_2()
+
+load("@com_github_mvukov_rules_ros2//repositories:rust_setup_stage_3.bzl", "rust_setup_stage_3")
+
+rust_setup_stage_3()
+
+load("@com_github_mvukov_rules_ros2//repositories:rust_setup_stage_4.bzl", "rust_setup_stage_4")
+
+rust_setup_stage_4()
