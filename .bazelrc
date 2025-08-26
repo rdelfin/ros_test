@@ -59,5 +59,3 @@ build --action_env=CARGO_BAZEL_REPIN=1
 # as the user configuration should be able to overwrite flags from this file.
 # See https://docs.bazel.build/versions/master/best-practices.html#bazelrc
 try-import %workspace%/user.bazelrc
-
-common --noenable_bzlmod --enable_workspace
